@@ -1,0 +1,24 @@
+{
+  "name": "gitter-export-room",
+  "version": "0.0.0",
+  "description": "",
+  "main": "bin/gitter-export-room.js",
+  "bin": {
+    "gitter-export-room": "bin/gitter-export-room.js"
+  },
+  "preferGlobal": true,
+  "scripts": {
+    "test": "eslint bin/"
+  },
+  "keywords": [],
+  "author": "Christopher Hiller <boneskull@boneskull.com> (https://boneskull.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "node-gitter": "^1.2.11",
+    "yargs": "^4.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^2.11.0"
+  }
+}
