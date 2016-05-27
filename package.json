@@ -18,6 +18,10 @@
     "node-gitter": "^1.2.11",
     "yargs": "^4.7.1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/boneskull/gitter-export-room.git"
+  },
   "devDependencies": {
     "eslint": "^2.11.0"
   }
