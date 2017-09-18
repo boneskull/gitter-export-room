@@ -8,6 +8,29 @@ const Promise = require('bluebird');
 const PER_PAGE = 500;
 
 require('yargs')
+  .command('list', 'Retrieve rooms and IDs', yargs => {
+    return yargs.usage('$0 [options] list')
+      .check(argv => {
+        if (!argv.token) {
+          argv.token = process.env.GITTER_TOKEN;
+        }
+        if (!argv.token) {
+          return 'Please specify token via "--token <token>" or GITTER_TOKEN ' +
+            'environment variable';
+        }
+        return true;
+      });
+  }, argv => {
+    return new Gitter(argv.token).rooms.findAll()
+      .then(roomList => {
+        const rooms = roomList.map(room => {
+          return `${room.id} : ${room.name}\n`;
+        });
+        rooms.forEach(room => {
+          process.stdout.write(room);
+        });
+      });
+  })
   .command('id', 'Retrieve by room ID', yargs => {
     return yargs.usage('$0 [options] id <room_id>')
       .example('id 3053736c7fd756bd5304c876')
