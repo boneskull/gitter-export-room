@@ -12,6 +12,16 @@ $ npm install --global gitter-export-room
 
 Use `--token` or specify `GITTER_TOKEN` env variable to authenticate.
 
+### List user's rooms
+
+```
+$ gitter-export-room list
+```
+
+The above command shows the user's rooms and its ids
+
+### Export room
+
 ```
 $ gitter-export-room id <room_id>
 ```
