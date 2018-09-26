@@ -6,6 +6,15 @@ const Gitter = require('node-gitter');
 const Promise = require('bluebird');
 
 const PER_PAGE = 500;
+// const PER_PAGE = 100;
+
+// sleep time expects milliseconds
+// sleep(500).then(() => {
+    // Do something after the sleep!
+// });
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 require('yargs')
   .command('list', 'Retrieve rooms and IDs', yargs => {
@@ -56,26 +65,44 @@ require('yargs')
         return Promise.coroutine(function* (limit) {
           let result;
           let beforeId;
+          let count = 0;
+          process.stdout.write('[\n');
           do {
+
+            let randwait = Math.random() * 1000 // random wait time
+            randwait = randwait | 0 // bitwise OR truncate float to int
+            
+            // process.stderr.write('\n' + count + ' fetched so far; sleeping ' + randwait + 'ms')
+            yield sleep(randwait)
+            
             result = yield room.chatMessages({
               limit,
               beforeId
             });
+
             if (result.length) {
-              messages.push(...result);
               beforeId = result[0].id;
-              process.stderr.write('.');
-            }
+              for (let mes of result) {
+                process.stdout.write(JSON.stringify(mes, null, 2));
+                process.stdout.write(',\n');
+                count++;
+              }
+              process.stderr.write('.')
+              if (count % 10000 === 0){
+                process.stderr.write(`${count/1000 | 0}k`)
+              }
+            }              
           } while (result.length);
-          process.stderr.write('\n');
-          return messages;
+          // return messages;
+          return count
         })(PER_PAGE);
       })
-      .then(messages => {
-        process.stdout.write(JSON.stringify(messages, null, 2));
-        process.stdout.write('\n');
+      .then(count => {
+        process.stdout.write('\n]\n');
+        process.stderr.write(`\n fetched ${count} messages; done`);
       })
       .catch(err => {
+        console.dir(err);
         throw err;
       });
   })
